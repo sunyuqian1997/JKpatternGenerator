@@ -3,7 +3,7 @@ let img;
 let inputbtn;
 let w=256;
 let sw=128;
-let w2=512;
+let w2=1024;
 let pg,pg2;
 let button;
 let font;
@@ -20,6 +20,7 @@ let posSlider, r1Slider, r2Slider;
 
 function preload() {
   img = loadImage('test.jpeg');
+  	
    font = loadFont("chinese.ttf");
 }
 
@@ -27,13 +28,13 @@ function setup() {
 
 
 
-	createCanvas(1600, 1600);
+	createCanvas(900, 600);
 	textFont(font);
 	 textSize(15);
 
 	posSlider = createSlider(0, 100, 50);
   	posSlider.position(20, w+20);
-  	r1Slider = createSlider(15, 450, 250);
+  	r1Slider = createSlider(15, 80, 30);
   	r1Slider.position(20, w+50);
   	r2Slider = createSlider(3, 60, 10);
   	r2Slider.position(20, w+80);
@@ -43,7 +44,7 @@ function setup() {
 	fill(30);
 	rect(0,0,w,w);
 
-	pg = createGraphics(sw, sw);
+	pg = createGraphics(w*2, w*2);
 	pg2 = createGraphics(w, w);
 
 
@@ -138,53 +139,91 @@ function draw(){
 function paint(){
 	
 	  console.log('generating');
+
+	 
 	
 
 pos=posSlider.value();
 r1=r1Slider.value();
 r2=r2Slider.value();
 
-image(img, 0, 0,sw,sw);
 
-		voronoiRndSites(r1, r2);
+ //    pg.image(img, 0, 0);
+
+	// pg.voronoiRndSites(r1, r2);
+	// pg.voronoi(w, w, true);
+	// pg.voronoiDraw(0, 0, true, false);
+	//img.resize(w,w);
+	image(img, 0, 0,w,w);
+
+	voronoiRndSites(r1, r2);
 	voronoi(w, w, true);
 	voronoiDraw(0, 0, true, false);
-		for (var i =0; i < sw; i++) {
+
+	loadPixels();
+
+		for (var i =0; i < w; i++) {
 		//取色
-		let pColor=get(i,floor(sw*pos/100));
+		let p=(2*width*floor(2*w*pos/100)+i*2)*4;
+		//pColor=get(i,floor(w*pos/100));
+		pColor=color(pixels[p], pixels[p + 1], 
+			pixels[p + 2], pixels[p + 3]);
+
+// pixels[p] = 255;
+// pixels[p + 1] = 0;
+// pixels[p + 2] = 0;
+// pixels[p + 3] = 255;
+// updatePixels(); 
+
 		pg.stroke(pColor);
 		pg.strokeWeight(1);
 		//noStroke();
-		pg.line(i,0,i,sw);
-
+		pg.line(i,0,i,w*2);
 	}
 
 
 
-	pg2.image(pg,0,0,w,w);
-	pg2.push();
-	pg2.translate(w / 2, w/ 2);
-	pg2.rotate(PI / 2.0);
-	pg2.tint(255, 127);
-	pg2.image(pg,-w/2,-w/2,w,w);
-	pg2.pop();
-//background(255);
-	image(pg2,0,0);
+	image(pg,0,0,w,w);
+	push();
+	translate(w / 2, w/ 2);
+	rotate(PI / 2.0);
+	tint(255, 127);
+	image(pg,-w/2,-w/2,w,w);
+	pop();
+
+
+loadPixels();
+
+	let pattern = createImage(2*w,2*w);
+pattern.loadPixels();
+for (let i = 0; i < w; i++) {
+  for (let j = 0; j < w; j++) {
+  	let p=(2*width*floor(2*j)+2*i)*4;
+		//pColor=get(i,floor(w*pos/100));
+		pColor=color(pixels[p], pixels[p + 1], 
+			pixels[p + 2], pixels[p + 3]);
+    pattern.set(i, j, pColor);
+  }
+}
+pattern.updatePixels();
+
 
 push();
 translate(w+20,0);
 	for (var i = 0; i <tile; i++) {
 		for(var j = 0; j <tile; j++){
-image(pg2,i*w2/tile,j*w2/tile,w2/tile,w2/tile);
+image(pattern,i*w*2/tile,j*w*2/tile,w2/tile,w2/tile);
 
 		}
 	}
 pop();
 
-fill(255);
+// fill(255);
 	
-	text('Done!',button.x+button.width+15,button.y+15);
-	  console.log('done');
+// 	text('Done!',button.x+button.width+15,button.y+15);
+// 	  console.log('done');
+
+image(img,20,450,120,120);
 
 push();
 translate(20,450);
@@ -192,26 +231,25 @@ stroke(255,0,0);
 line(0,pos*0.01*120,120,pos*0.01*120);
 pop();
 
+document.getElementById('tips').innerText = '生成完毕！';
+
 }
 
 function processFile(file) { 
 	if (file.type === 'image') {
 		console.log('got image file');
 	img=createImg(file.data).hide();
+
 	image(img,20,450,120,120);
 }else {
     console.log('Not an image file!');
-
-    text('NOT IMAGE FILE!!',button.x+button.width+15,button.y+15);
+     document.getElementById('tips').innerText = '不是图片文件哦，不行的！';
+    //text('NOT IMAGE FILE!!',button.x+button.width+15,button.y+15);
   }
 } 
 
 function processing(){
-
-	// fill(255);
-	// rect(button.x+button.width+15,button.y,90,30);
-	// fill(0);
-	// text('Processing...',button.x+button.width+15,button.y+15);
+ document.getElementById('tips').innerText = '生成中……';
 	paint();
-
 }
+
