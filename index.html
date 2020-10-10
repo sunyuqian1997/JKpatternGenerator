@@ -1,16 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0>
+    <meta name="viewport" width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, charset=utf-8>
     <style> body {padding: 0; margin: 0;} </style>
     <script src="p5.js"></script>
       <script src="p5.dom.js"></script>
     <script src="library/rhill-voronoi-core.js"></script>
     <script src="library/p5.voronoi.js"></script>
   
+    <style>
+      #tips {
+        position: fixed;
+        top:600px;
+        bottom: 0px;
+        left: 20px;
+        width: 300px;
+        height: 100px;
+        background-color: white;
+      }
+
+            #title {
+        position: fixed;
+        top:620px;
+        bottom: 0px;
+        left: 20px;
+        width: 600px;
+        height: 200px;
+        background-color: white;
+        font-weight:bold;
+
+      }
+
+    </style>
   </head>
 
   <body>
   <script src="example1.js"></script>
+
+  <div id="tips"> 选择图片后按Go生成 </div>
+  <span id="title"> <br/>JK格子生成器 by 起司 方法来源微博@Dr-H_喵_</span>
+
   </body>
 </html>
