@@ -21,15 +21,16 @@ let posSlider, r1Slider, r2Slider;
 function preload() {
   img = loadImage('test.jpeg');
   	
-   font = loadFont("chinese.ttf");
+   //font = loadFont("chinese.ttf");
 }
 
 function setup() {
 
 
-
 	createCanvas(900, 600);
-	textFont(font);
+
+pixelDensity(2);
+	//textFont(font);
 	 textSize(15);
 
 	posSlider = createSlider(0, 100, 50);
@@ -44,8 +45,11 @@ function setup() {
 	fill(30);
 	rect(0,0,w,w);
 
+
 	pg = createGraphics(w*2, w*2);
 	pg2 = createGraphics(w, w);
+	pg.pixelDensity(2);
+pg2.pixelDensity(2);
 
 
 	  button = createButton('Go!');
@@ -129,7 +133,7 @@ function draw(){
 
 //background(220);
 
-	  text('position', posSlider.x * 2 + posSlider.width, posSlider.y+15);
+	text('position', posSlider.x * 2 + posSlider.width, posSlider.y+15);
   text('density', r1Slider.x * 2 + r1Slider.width, r1Slider.y+15);
   text('min distance', r2Slider.x * 2 + r2Slider.width, r2Slider.y+15);
 
@@ -160,11 +164,11 @@ r2=r2Slider.value();
 	voronoi(w, w, true);
 	voronoiDraw(0, 0, true, false);
 
-	loadPixels();
+	this.loadPixels();
 
 		for (var i =0; i < w; i++) {
 		//取色
-		let p=(2*width*floor(2*w*pos/100)+i*2)*4;
+		let p=(2*900*floor(2*w*pos/100)+i*2)*4;
 		//pColor=get(i,floor(w*pos/100));
 		pColor=color(pixels[p], pixels[p + 1], 
 			pixels[p + 2], pixels[p + 3]);
@@ -192,13 +196,14 @@ r2=r2Slider.value();
 	pop();
 
 
-loadPixels();
+this.loadPixels();
 
 	let pattern = createImage(2*w,2*w);
+
 pattern.loadPixels();
 for (let i = 0; i < w; i++) {
   for (let j = 0; j < w; j++) {
-  	let p=(2*width*floor(2*j)+2*i)*4;
+  	let p=(2*900*floor(2*j)+2*i)*4;
 		//pColor=get(i,floor(w*pos/100));
 		pColor=color(pixels[p], pixels[p + 1], 
 			pixels[p + 2], pixels[p + 3]);
